@@ -13,10 +13,10 @@
     <version>1.0-SNAPSHOT</version>
 
     <modules>
-        <module>fixme-router</module>
-        <module>fixme-market</module>
-        <module>fixme-broker</module>
-        <module>fixme-controller</module>
+        <module>fixme_broker</module>
+        <module>fixme_router</module>
+        <module>fixme_market</module>
+        <module>fixme_controller</module>
     </modules>
 
     <build>
