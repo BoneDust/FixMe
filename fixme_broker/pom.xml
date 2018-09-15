@@ -18,7 +18,7 @@
 
     <build>
 
-        <finalName>fixme_broker</finalName>
+        <finalName>broker</finalName>
         <plugins>
 
             <plugin>
@@ -40,7 +40,7 @@
                     <archive>
                         <manifest>
                             <addClasspath>true</addClasspath>
-                            <mainClass>za.co.wethinkcode.swingy.Main</mainClass>
+                            <mainClass>Broker.Broker</mainClass>
                         </manifest>
                     </archive>
                 </configuration>
