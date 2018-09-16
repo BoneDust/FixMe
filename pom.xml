@@ -14,9 +14,8 @@
 
     <modules>
         <module>fixme_broker</module>
-        <module>fixme_router</module>
         <module>fixme_market</module>
-        <module>fixme_controller</module>
+        <module>fixme_router</module>
     </modules>
 
     <build>

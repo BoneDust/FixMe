@@ -1,8 +1,7 @@
-package Market;
+package market;
 
 import java.net.InetSocketAddress;
 import java.nio.channels.AsynchronousSocketChannel;
-import java.util.ArrayList;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -12,15 +11,15 @@ public class Market
     static ExecutorService threadPool;
     static int id;
     final int PORT = 5000;
-    final static int TIMEOUT = 3000;
+    final static int TIME_OUT_DURATION = 3000;
     //ArrayList<Instrument> instruments = new ArrayList<>();
 
     public static void main (String [] args)
     {
-        new Market().runmarket();
+        new Market().runMarket();
     }
 
-    private void runmarket()
+    private void runMarket()
     {
         Thread currentThread;
         threadPool = Executors.newFixedThreadPool(2, Executors.defaultThreadFactory());
@@ -46,6 +45,7 @@ public class Market
         }
     }
 
+
     public static void startReading()
     {
         MarketReadMessageTask readMessageTask = new MarketReadMessageTask();
@@ -62,7 +62,7 @@ public class Market
     {
         try
         {
-            Market.class.wait(TIMEOUT);
+            Market.class.wait(TIME_OUT_DURATION);
         }
         catch (InterruptedException ex)
         {

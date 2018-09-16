@@ -18,7 +18,7 @@
 
     <build>
 
-        <finalName>fixme_router</finalName>
+        <finalName>router</finalName>
         <plugins>
 
             <plugin>
@@ -40,7 +40,7 @@
                     <archive>
                         <manifest>
                             <addClasspath>true</addClasspath>
-                            <mainClass>za.co.wethinkcode.swingy.Main</mainClass>
+                            <mainClass>router.Router</mainClass>
                         </manifest>
                     </archive>
                 </configuration>

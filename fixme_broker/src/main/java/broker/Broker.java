@@ -1,4 +1,4 @@
-package Broker;
+package broker;
 
 import java.net.InetSocketAddress;
 import java.nio.channels.AsynchronousSocketChannel;
@@ -6,13 +6,14 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 
-public class Broker
+public class
+Broker
 {
     static AsynchronousSocketChannel brokerSocket;
     static ExecutorService threadPool;
     static int id;
     final int PORT = 5000;
-    final static int TIMEOUT = 3000;
+    final static int TIME_OUT_DURATION = 3000;
     
     public static void main (String [] args)
     {
@@ -61,7 +62,7 @@ public class Broker
     {
         try
         {
-            Broker.class.wait(TIMEOUT);
+            Broker.class.wait(TIME_OUT_DURATION);
         }
         catch (InterruptedException ex)
         {
