@@ -20,9 +20,9 @@ public class MarketSendMessageTask implements Runnable
             byte[] bytes = message.getBytes();
             ByteBuffer buffer = ByteBuffer.wrap(bytes);
             Future writing = Market.marketSocket.write(buffer);
-            Market.ReadWriteNonBlockingTimeOut();
-            if (!writing.isDone())
-                System.out.println("\nMessage not sent. Send duration timed-out");
+           // Market.ReadWriteNonBlockingTimeOut();
+            while (!writing.isDone());
+            //    System.out.println("\nMessage not sent. Send duration timed-out");
             buffer.clear();
         }
         catch (Exception ex){  ex.printStackTrace();  }

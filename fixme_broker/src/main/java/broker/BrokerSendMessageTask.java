@@ -22,10 +22,10 @@ public class BrokerSendMessageTask implements Runnable
                 byte[] bytes = msg.getBytes();
                 ByteBuffer buffer = ByteBuffer.wrap(bytes);
                 Future writing = Broker.brokerSocket.write(buffer);
-                Broker.ReadWriteNonBlockingTimeOut();
-                if (!writing.isDone())
-                    System.out.println("\nMessage not sent. Send duration timed-out");
-                else
+              //  Broker.ReadWriteNonBlockingTimeOut();
+                while (!writing.isDone());
+                  //  System.out.println("\nMessage not sent. Send duration timed-out");
+                //else
                 {
                     if (new String(buffer.array()).trim().equals("bye"))
                         break;

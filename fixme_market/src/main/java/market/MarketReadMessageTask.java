@@ -12,10 +12,10 @@ public class MarketReadMessageTask implements Runnable
             System.out.println("\nWaiting for incoming message ...");
             ByteBuffer buffer = ByteBuffer.allocate(8192);
             Future reading = Market.marketSocket.read(buffer);
-            Market.ReadWriteNonBlockingTimeOut();
-            if (!reading.isDone())
-                System.out.println("Response not received. Response Duration timed-out");
-            else
+          //  Market.ReadWriteNonBlockingTimeOut();
+            while (!reading.isDone());
+            //    System.out.println("Response not received. Response Duration timed-out");
+            //else
             {
                 buffer.flip();
                 Market.startSending("\nmarket sees you");

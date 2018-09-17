@@ -1,10 +1,36 @@
 package router;
 
+import java.nio.ByteBuffer;
+import java.nio.channels.AsynchronousSocketChannel;
+import java.util.concurrent.Future;
+
 public class RouterSendMessageTask implements Runnable
 {
 
-    public void run()
+    AsynchronousSocketChannel socket;
+    String message;
+    boolean isBroker;
+
+    public RouterSendMessageTask(AsynchronousSocketChannel socket, boolean isBroker ,String message)
+    {
+        this.socket = socket;
+        this.message  = message;
+        this.isBroker = isBroker;
+    }
+
+    public  void run()
     {
 
+        byte[] bytes = message.getBytes();
+        ByteBuffer buffer = ByteBuffer.wrap(bytes);
+        Future writing = socket.write(buffer);
+       // Router.RouterReadWriteNonBlockingTimeOut();
+        while (!writing.isDone());
+        //    System.out.println("couldn't write in time.");
+        //else
+        {
+            if (!isBroker)
+                Router.startReading(socket);
+        }
     }
 }

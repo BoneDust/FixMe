@@ -62,7 +62,7 @@ public class Market
     {
         try
         {
-            Market.class.wait(TIME_OUT_DURATION);
+            Thread.sleep(TIME_OUT_DURATION);
         }
         catch (InterruptedException ex)
         {

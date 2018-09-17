@@ -62,7 +62,7 @@ Broker
     {
         try
         {
-            Broker.class.wait(TIME_OUT_DURATION);
+            Thread.sleep(TIME_OUT_DURATION);
         }
         catch (InterruptedException ex)
         {

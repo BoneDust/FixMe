@@ -10,10 +10,10 @@ public class BrokerReadMessageTask implements Runnable
             System.out.println("\nWaiting for response ...");
             ByteBuffer buffer = ByteBuffer.allocate(8192);
             Future reading = Broker.brokerSocket.read(buffer);
-            Broker.ReadWriteNonBlockingTimeOut();
-            if (!reading.isDone())
-                System.out.println("Response not received. Response Duration timed-out");
-            else
+            //Broker.ReadWriteNonBlockingTimeOut();
+            while (!reading.isDone());
+            //    System.out.println("Response not received. Response Duration timed-out");
+            //else
             {
                 buffer.flip();
                 String msg = new String(buffer.array()).trim();
