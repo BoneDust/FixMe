@@ -20,7 +20,6 @@ public class RouterSendMessageTask implements Runnable
 
     public  void run()
     {
-
         byte[] bytes = message.getBytes();
         ByteBuffer buffer = ByteBuffer.wrap(bytes);
         Future writing = socket.write(buffer);

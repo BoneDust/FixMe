@@ -15,6 +15,7 @@ public class RouterMarketCompletionHandler implements CompletionHandler<Asynchro
 
     public void completed(AsynchronousSocketChannel ch, Object att)
     {
+        System.out.println("sending message to the market");
         Router.handleMarketConnection(ch);
         server.accept(att, this);
     }

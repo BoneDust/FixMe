@@ -4,7 +4,7 @@ import java.nio.channels.AsynchronousServerSocketChannel;
 import java.nio.channels.AsynchronousSocketChannel;
 import java.nio.channels.CompletionHandler;
 
-public class RouterBrokerCompletionHandler implements CompletionHandler<AsynchronousSocketChannel,Object>
+public class RouterBrokerCompletionHandler implements CompletionHandler<AsynchronousSocketChannel, Object>
 {
     private AsynchronousServerSocketChannel server;
 
@@ -15,6 +15,7 @@ public class RouterBrokerCompletionHandler implements CompletionHandler<Asynchro
 
     public void completed(AsynchronousSocketChannel ch, Object att)
     {
+        System.out.println("hold me close"); //todo problem is the brokercompletionhandler is running for both servers
         Router.handleBrokerConnection(ch);
         server.accept(att, this);
     }
