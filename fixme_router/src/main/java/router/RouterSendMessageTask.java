@@ -26,11 +26,11 @@ public class RouterSendMessageTask implements Runnable
         Future writing = socket.write(buffer);
        // Router.RouterReadWriteNonBlockingTimeOut();
         while (!writing.isDone());
-        //    System.out.println("couldn't write in time.");
-        //else
+        /*    System.out.println("couldn't write in time.");
+        else
         {
             if (!isBroker)
                 Router.startReading(socket);
-        }
+        }*/
     }
 }

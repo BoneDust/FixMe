@@ -5,6 +5,13 @@ import java.util.concurrent.Future;
 
 public class MarketReadMessageTask implements Runnable
 {
+    boolean isFirstMessage;
+//todo cancel the future object when timing out.
+    public MarketReadMessageTask(boolean isFirstMessage)
+    {
+        this.isFirstMessage = isFirstMessage;
+    }
+
     public  void run()
     {
         while (true)
@@ -18,18 +25,16 @@ public class MarketReadMessageTask implements Runnable
             //else
             {
                 buffer.flip();
-                Market.startSending("\nmarket sees you");
                 String msg = new String(buffer.array()).trim();
-                System.out.println("\nResponse: " + msg);
-                if (msg.equals("bye"))
+                System.out.println("Response: " + msg);
+                if (isFirstMessage)
+                {
+                    //todo forgot what i wanted to do here.
                     break;
+                }
+                else
+                    Market.startSending("market sees you");
             }
         }
-    }
-
-    private void clearScreen()
-    {
-        System.out.print("\033[H\033[2J");
-        System.out.flush();
     }
 }

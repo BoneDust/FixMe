@@ -16,7 +16,7 @@ public class MarketSendMessageTask implements Runnable
     {
         try
         {
-            System.out.print("\nMessage to router:  " + message);
+            System.out.println("\nMessage to router:  " + message);
             byte[] bytes = message.getBytes();
             ByteBuffer buffer = ByteBuffer.wrap(bytes);
             Future writing = Market.marketSocket.write(buffer);

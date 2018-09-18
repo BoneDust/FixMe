@@ -46,9 +46,9 @@ public class Market
     }
 
 
-    public static void startReading()
+    public static void startReading(boolean isFirstMessage)
     {
-        MarketReadMessageTask readMessageTask = new MarketReadMessageTask();
+        MarketReadMessageTask readMessageTask = new MarketReadMessageTask(isFirstMessage);
         threadPool.execute(readMessageTask);
     }
 

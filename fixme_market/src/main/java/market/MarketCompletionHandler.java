@@ -7,7 +7,9 @@ public class MarketCompletionHandler implements CompletionHandler<Void, Asynchro
 {
     public void completed(Void att, AsynchronousSocketChannel ch)
     {
-        Market.startReading();
+        Market.startReading(true);
+        try {Thread.sleep(2000);}catch (Exception ex){}
+        Market.startReading(false);
     }
 
     public void failed(Throwable e, AsynchronousSocketChannel ch)

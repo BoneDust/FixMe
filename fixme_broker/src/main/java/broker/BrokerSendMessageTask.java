@@ -18,7 +18,7 @@ public class BrokerSendMessageTask implements Runnable
                 if (stdin.hasNextLine())
                     msg = stdin.nextLine();
                 else
-                    msg = "bye";
+                    System.exit(0);
                 byte[] bytes = msg.getBytes();
                 ByteBuffer buffer = ByteBuffer.wrap(bytes);
                 Future writing = Broker.brokerSocket.write(buffer);
@@ -29,7 +29,7 @@ public class BrokerSendMessageTask implements Runnable
                 {
                     if (new String(buffer.array()).trim().equals("bye"))
                         break;
-                    Broker.startReading();
+                   new BrokerReadMessageTask().run();// Broker.startReading();
                 }
                 buffer.clear();
             }
