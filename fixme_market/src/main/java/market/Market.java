@@ -9,8 +9,8 @@ public class Market
 {
     static AsynchronousSocketChannel marketSocket;
     static ExecutorService threadPool;
-    static int id;
-    final int PORT = 5000;
+    static int id = 0;
+    final int PORT = 5001;
     final static int TIME_OUT_DURATION = 3000;
     //ArrayList<Instrument> instruments = new ArrayList<>();
 
@@ -48,14 +48,12 @@ public class Market
 
     public static void startReading(boolean isFirstMessage)
     {
-        MarketReadMessageTask readMessageTask = new MarketReadMessageTask(isFirstMessage);
-        threadPool.execute(readMessageTask);
+        threadPool.execute(new MarketReadMessageTask(isFirstMessage));
     }
 
     public static void startSending(String message)
     {
-        MarketSendMessageTask sendMessageTask = new MarketSendMessageTask(message);
-        threadPool.execute(sendMessageTask);
+        threadPool.execute(new MarketSendMessageTask(message));
     }
 
     public static void ReadWriteNonBlockingTimeOut()

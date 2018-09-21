@@ -15,7 +15,6 @@ public class RouterBrokerCompletionHandler implements CompletionHandler<Asynchro
 
     public void completed(AsynchronousSocketChannel ch, Object att)
     {
-        System.out.println("hold me close"); //todo problem is the brokercompletionhandler is running for both servers
         Router.handleBrokerConnection(ch);
         server.accept(att, this);
     }

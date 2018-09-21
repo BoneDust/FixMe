@@ -23,13 +23,16 @@ public class RouterSendMessageTask implements Runnable
         byte[] bytes = message.getBytes();
         ByteBuffer buffer = ByteBuffer.wrap(bytes);
         Future writing = socket.write(buffer);
-       // Router.RouterReadWriteNonBlockingTimeOut();
-        while (!writing.isDone());
-        /*    System.out.println("couldn't write in time.");
+        //Router.RouterReadWriteNonBlockingTimeOut(writing);
+        while  (!writing.isDone());
+        /*{
+            writing.cancel(true);
+            System.out.println("couldn't write in time.");
+        }
         else
         {
-            if (!isBroker)
-                Router.startReading(socket);
+           // if (!isBroker)
+             //   Router.startReading(socket);todo
         }*/
     }
 }

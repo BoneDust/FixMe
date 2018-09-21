@@ -29,7 +29,7 @@ public class MarketReadMessageTask implements Runnable
                 System.out.println("Response: " + msg);
                 if (isFirstMessage)
                 {
-                    //todo forgot what i wanted to do here.
+                    Market.id = Integer.parseInt(msg);
                     break;
                 }
                 else

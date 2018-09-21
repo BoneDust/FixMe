@@ -2,7 +2,9 @@ package router;
 
 import java.nio.ByteBuffer;
 import java.nio.channels.AsynchronousSocketChannel;
+import java.nio.channels.ReadPendingException;
 import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
 
 public class RouterReadMessageTask implements Runnable
 {
@@ -21,12 +23,26 @@ public class RouterReadMessageTask implements Runnable
         do
         {
             ByteBuffer buffer = ByteBuffer.allocate(8192);
-            Future reading = socket.read(buffer);
-            Router.RouterReadWriteNonBlockingTimeOut();
-           while (!reading.isDone());
-            //   System.out.println("couldn't read in time.");
-            //else
+            Future reading = null;
+            try
             {
+                reading  = socket.read(buffer);
+            }
+            catch (ReadPendingException ex)
+            {
+                if (reading != null)
+                    reading.cancel(true);
+                continue;
+            }
+            //Router.RouterReadWriteNonBlockingTimeOut() ;
+            while (!reading.isDone());
+            {
+                System.out.println("Reading not complete");
+                //reading.cancel(false);
+                //continue;
+             /*   try{
+                reading.get(1, TimeUnit.SECONDS);}
+                catch (Ex
                 buffer.flip();
                 String msg = new String(buffer.array()).trim();
                 if (msg.equals(""))
@@ -37,7 +53,7 @@ public class RouterReadMessageTask implements Runnable
             if (!isBroker)
                 break;
             else
-                Router.startSending(socket);
+                new RouterSendMessageTask(socket, true, "bloom").run();
         }
         while (true);
     }

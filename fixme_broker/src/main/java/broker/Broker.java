@@ -11,7 +11,7 @@ Broker
 {
     static AsynchronousSocketChannel brokerSocket;
     static ExecutorService threadPool;
-    static int id;
+    static int id = 0;
     final int PORT = 5000;
     final static int TIME_OUT_DURATION = 3000;
     
@@ -48,14 +48,12 @@ Broker
 
     public static void startReading()
     {
-        BrokerReadMessageTask readMessageTask = new BrokerReadMessageTask();
-        threadPool.execute(readMessageTask);
+        threadPool.execute(new BrokerReadMessageTask());
     }
 
     public static void startSending()
     {
-        BrokerSendMessageTask sendMessageTask = new BrokerSendMessageTask();
-        threadPool.execute(sendMessageTask);
+        threadPool.execute(new BrokerSendMessageTask());
     }
 
     public static void ReadWriteNonBlockingTimeOut()

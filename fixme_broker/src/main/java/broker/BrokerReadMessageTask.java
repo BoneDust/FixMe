@@ -7,7 +7,6 @@ public class BrokerReadMessageTask implements Runnable
 {
     public  void run()
     {
-     //       System.out.println("\nWaiting for response ...");
             ByteBuffer buffer = ByteBuffer.allocate(8192);
             Future reading = Broker.brokerSocket.read(buffer);
             //Broker.ReadWriteNonBlockingTimeOut();
@@ -18,6 +17,8 @@ public class BrokerReadMessageTask implements Runnable
                 buffer.flip();
                 String msg = new String(buffer.array()).trim();
                 System.out.println("\nRouter response: " + msg);
+                if (Broker.id == 0)
+                    Broker.id = Integer.parseInt(msg);
             }
     }
 }
