@@ -14,17 +14,17 @@ import java.util.concurrent.TimeUnit;
 public class Router
 {
 
-    static final int BROKER_PORT = 5000;
-    static final int MARKET_PORT = 5001;
+    private static final int BROKER_PORT = 5000;
+    private static final int MARKET_PORT = 5001;
     static final int TIME_OUT_DURATION = 3000;
-    static int currentBrokerId = 100000;
-    static int currentMarketId = 500000;
-    static AsynchronousServerSocketChannel marketServer;
-    static AsynchronousServerSocketChannel brokerServer;
+    private static int currentBrokerId = 100000;
+    private static int currentMarketId = 500000;
+    private static AsynchronousServerSocketChannel marketServer;
+    private static AsynchronousServerSocketChannel brokerServer;
     static Map<Integer, AsynchronousSocketChannel> brokers;
     static Map<Integer, AsynchronousSocketChannel> markets;
-    static ExecutorService threadPool;
-    static Thread currentThread;
+    private static ExecutorService threadPool;
+    private static Thread currentThread;
 
     public static void main(String[] args)
     {
@@ -49,6 +49,8 @@ public class Router
             }
             catch (InterruptedException ex)
             {
+                System.out.println("Router idling interrupted");
+                System.exit(0);
             }
         }
         catch (Exception ex)
@@ -61,30 +63,17 @@ public class Router
 
     public static void handleMarketConnection(AsynchronousSocketChannel marketSocket)
     {
-        threadPool.execute(new RouterSendMessageTask(marketSocket, false, Integer.toString(currentMarketId)));
+        threadPool.execute(new RouterSendMessageTask(marketSocket, Integer.toString(currentMarketId)));
         markets.put(currentMarketId, marketSocket);
         currentMarketId++;
     }
 
     public static void handleBrokerConnection(AsynchronousSocketChannel brokerSocket)
     {
-        threadPool.execute(new RouterSendMessageTask(brokerSocket, true, Integer.toString(currentBrokerId)));
+        threadPool.execute(new RouterSendMessageTask(brokerSocket, Integer.toString(currentBrokerId)));
         threadPool.execute(new RouterReadMessageTask(brokerSocket, true));
         brokers.put(currentBrokerId, brokerSocket);
         currentBrokerId++;
-    }
-
-    public static void RouterReadWriteNonBlockingTimeOut()
-    {
-        try
-        {
-            Thread.sleep(TIME_OUT_DURATION);
-        }
-        catch (InterruptedException ex)
-        {
-            System.out.println("\n\t<< RouterReadWriteNonBlockingException >> \n");
-            ex.printStackTrace();
-        }
     }
 
 }

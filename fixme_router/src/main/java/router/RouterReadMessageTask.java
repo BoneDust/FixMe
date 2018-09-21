@@ -4,7 +4,6 @@ import java.nio.ByteBuffer;
 import java.nio.channels.AsynchronousSocketChannel;
 import java.nio.channels.ReadPendingException;
 import java.util.concurrent.Future;
-import java.util.concurrent.TimeUnit;
 
 public class RouterReadMessageTask implements Runnable
 {
@@ -34,26 +33,28 @@ public class RouterReadMessageTask implements Runnable
                     reading.cancel(true);
                 continue;
             }
-            //Router.RouterReadWriteNonBlockingTimeOut() ;
+
             while (!reading.isDone());
+            buffer.flip();
+            String message = new String(buffer.array()).trim();
+            int receiverId = RouterHelper.retrieveReceiverId(message);
+            int senderId =  RouterHelper.retrieveSenderId(message);
+
+            if (message.equals(""))
             {
-                System.out.println("Reading not complete");
-                //reading.cancel(false);
-                //continue;
-             /*   try{
-                reading.get(1, TimeUnit.SECONDS);}
-                catch (Ex
-                buffer.flip();
-                String msg = new String(buffer.array()).trim();
-                if (msg.equals(""))
-                    break;
-                else
-                    System.out.println("Message received: " + msg);
-            }
-            if (!isBroker)
+                RouterHelper.endConnection(senderId, socket);
                 break;
+            }
             else
-                new RouterSendMessageTask(socket, true, "bloom").run();
+                System.out.println("Message received: " + message);
+
+            if (!isBroker)
+            {
+                RouterHelper.sendToBroker(receiverId, message);
+                break;
+            }
+            else
+                RouterHelper.sendToMarket(receiverId, message);
         }
         while (true);
     }
