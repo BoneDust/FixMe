@@ -13,7 +13,7 @@ Broker
     static ExecutorService threadPool;
     static int id = 0;
     final int PORT = 5000;
-    final static int TIME_OUT_DURATION = 3000;
+    final static int TIME_OUT_DURATION = 5000;
     
     public static void main (String [] args)
     {
@@ -23,7 +23,7 @@ Broker
     private void runBroker()
     {
         Thread currentThread;
-        threadPool = Executors.newFixedThreadPool(2, Executors.defaultThreadFactory());
+        threadPool = Executors.newCachedThreadPool(Executors.defaultThreadFactory());
 
         try
         {
@@ -56,16 +56,5 @@ Broker
         threadPool.execute(new BrokerSendMessageTask());
     }
 
-    public static void ReadWriteNonBlockingTimeOut()
-    {
-        try
-        {
-            Thread.sleep(TIME_OUT_DURATION);
-        }
-        catch (InterruptedException ex)
-        {
-            System.out.println("\n\t<< BrokerReadWriteNonBlockingException >> \n");
-            ex.printStackTrace();
-        }
-    }
+
 }

@@ -22,6 +22,5 @@ public class RouterBrokerCompletionHandler implements CompletionHandler<Asynchro
     public void failed(Throwable e, Object att)
     {
         System.out.println("connection failed");
-        e.printStackTrace();
     }
 }

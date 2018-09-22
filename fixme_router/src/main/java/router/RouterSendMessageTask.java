@@ -29,7 +29,7 @@ public class RouterSendMessageTask implements Runnable
         catch (WritePendingException ex)
         {
             if (writing != null)
-                writing.cancel(true);
+                writing.cancel(false);
         }
         RouterHelper.RouterReadWriteNonBlockingTimeOut(Router.TIME_OUT_DURATION);
         if (!writing.isDone())

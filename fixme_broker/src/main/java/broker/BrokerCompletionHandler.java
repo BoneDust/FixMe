@@ -14,7 +14,6 @@ public class BrokerCompletionHandler implements CompletionHandler<Void, Asynchro
     public void failed(Throwable e, AsynchronousSocketChannel ch)
     {
         System.out.println("connection failed");
-        e.printStackTrace();
         System.exit(0);
     }
 }

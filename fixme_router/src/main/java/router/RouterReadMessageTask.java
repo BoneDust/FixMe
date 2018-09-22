@@ -30,7 +30,7 @@ public class RouterReadMessageTask implements Runnable
             catch (ReadPendingException ex)
             {
                 if (reading != null)
-                    reading.cancel(true);
+                    reading.cancel(false);
                 continue;
             }
 
