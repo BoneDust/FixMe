@@ -23,11 +23,13 @@ public class RouterHelper
 
     public static int retrieveReceiverId(String message)
     {
-        return (0);
+        String[] split = message.split("|");
+        return (Integer.parseInt(split[1].split("=")[1]));
     }
     public static int retrieveSenderId(String message)
     {
-        return (0);
+        String[] split = message.split("|");
+        return (Integer.parseInt(split[0].split("=")[1]));
     }
 
     public static void sendToMarket(int id, String message)
