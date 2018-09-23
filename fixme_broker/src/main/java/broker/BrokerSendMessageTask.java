@@ -14,7 +14,7 @@ public class BrokerSendMessageTask implements Runnable
 
         while (true)
         {
-            message = BrokerHelper.retrieveFixMessage(stdin);
+            message = BrokerSendHelper.retrieveFixMessage(stdin);
             byte[] bytes = message.getBytes();
             ByteBuffer buffer = ByteBuffer.wrap(bytes);
             Future writing = null;
@@ -27,7 +27,7 @@ public class BrokerSendMessageTask implements Runnable
                 if (writing != null)
                     writing.cancel(false);
             }
-            BrokerHelper.ReadWriteNonBlockingTimeOut();
+            BrokerSendHelper.ReadWriteNonBlockingTimeOut();
             if (!writing.isDone())
                 System.out.println("\nMessage not sent. Send duration timed-out");
             else

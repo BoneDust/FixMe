@@ -6,7 +6,7 @@ import java.util.Scanner;
 
 import static broker.Broker.TIME_OUT_DURATION;
 
-public class BrokerHelper
+public class BrokerSendHelper
 {
     private static String displayMenu(Scanner stdin)
     {
@@ -42,17 +42,13 @@ public class BrokerHelper
             System.out.print("\n*********************************\n" +
                             "*         Select a market       *\n" +
                             "*********************************\n");
-            for (int id : Broker.marketIDs)
-            {
-                System.out.println("  "+ id);
-            }
-            System.out.print("Choice: ");
+            System.out.print("Market ID: ");
             if (stdin.hasNextLine())
                 choice = stdin.nextLine();
             else
                 System.exit(0);
         }
-        while(choice.matches("^\\d+$") && !Broker.marketIDs.contains(Integer.parseInt(choice)));
+        while(!choice.matches("^\\d+$"));
         return (choice);
     }
 
@@ -66,7 +62,7 @@ public class BrokerHelper
 
     private static String verifySellingPower(String name, String quantity, String price)
     {
-        boolean foundInstrument = false
+        boolean foundInstrument = false;
         for (Instrument instrument : Broker.instruments)
         {
             if (instrument.getName().equals(name) && Integer.parseInt(quantity) <= instrument.getQuantity())
@@ -83,7 +79,7 @@ public class BrokerHelper
 
     private static String selectInstrument(Scanner stdin, boolean isBuying)
     {
-        String instrumentInfo = "", name = "null", quantity = "null", price = "null";
+        String instrumentInfo = "", name = "", quantity = "", price = "";
 
         System.out.print("\n*********************************\n" +
                 "*      Select an instrument     *\n" +
@@ -184,23 +180,9 @@ public class BrokerHelper
         }
         while (message.equals("null"));
 
-        message += "Checksum=" + retrieveChecksum(message) + "|";
+        //message += "Checksum=" + retrieveChecksum(message) + "|";
         return message;
     }
-
-    public static void ReadWriteNonBlockingTimeOut()
-    {
-        try
-        {
-            Thread.sleep(TIME_OUT_DURATION);
-        }
-        catch (InterruptedException ex)
-        {
-            System.out.println("\n\t<< BrokerReadWriteNonBlockingException >> \n");
-            ex.printStackTrace();
-        }
-    }
-
 
     //todo we now need to handle the incoming messages
 }

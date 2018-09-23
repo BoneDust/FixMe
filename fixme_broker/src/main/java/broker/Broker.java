@@ -17,7 +17,6 @@ Broker
     static int id = 0;
     final int PORT = 5000;
     final static int TIME_OUT_DURATION = 5000;
-    static ArrayList<Integer> marketIDs;
     static ArrayList<Instrument> instruments;
     static double money = 1000.00;
     
@@ -60,6 +59,19 @@ Broker
     public static void startSending()
     {
         threadPool.execute(new BrokerSendMessageTask());
+    }
+
+    public static void ReadWriteNonBlockingTimeOut()
+    {
+        try
+        {
+            Thread.sleep(TIME_OUT_DURATION);
+        }
+        catch (InterruptedException ex)
+        {
+            System.out.println("\n\t<< BrokerReadWriteNonBlockingException >> \n");
+            ex.printStackTrace();
+        }
     }
 
 

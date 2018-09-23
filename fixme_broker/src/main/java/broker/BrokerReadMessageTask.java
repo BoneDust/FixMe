@@ -20,16 +20,16 @@ public class BrokerReadMessageTask implements Runnable
                 if (reading != null)
                     reading.cancel(false);
             }
-            BrokerHelper.ReadWriteNonBlockingTimeOut();
+            Broker.ReadWriteNonBlockingTimeOut();
             if (!reading.isDone())
                 System.out.println("Response not received. Response Duration timed-out");
             else
             {
                 buffer.flip();
-                String msg = new String(buffer.array()).trim();
-                System.out.println("\nRouter response: " + msg);
+                String message = new String(buffer.array()).trim();
+                BrokerReadHelper.processMessage(message);
                 if (Broker.id == 0)
-                    Broker.id = Integer.parseInt(msg);
+                    Broker.id = Integer.parseInt(message);
             }
     }
 }
