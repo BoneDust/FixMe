@@ -1,7 +1,10 @@
 package broker;
 
+import broker.models.Instrument;
+
 import java.net.InetSocketAddress;
 import java.nio.channels.AsynchronousSocketChannel;
+import java.util.ArrayList;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -14,6 +17,9 @@ Broker
     static int id = 0;
     final int PORT = 5000;
     final static int TIME_OUT_DURATION = 5000;
+    static ArrayList<Integer> marketIDs;
+    static ArrayList<Instrument> instruments;
+    static double money = 1000.00;
     
     public static void main (String [] args)
     {
