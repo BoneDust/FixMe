@@ -1,7 +1,11 @@
 package market;
 
+import market.models.Instrument;
+
 import java.net.InetSocketAddress;
 import java.nio.channels.AsynchronousSocketChannel;
+import java.util.ArrayList;
+import java.util.Random;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -12,7 +16,8 @@ public class Market
     static int id = 0;
     final int PORT = 5001;
     final static int TIME_OUT_DURATION = 3000;
-    //ArrayList<Instrument> instruments = new ArrayList<>();
+    static ArrayList<Instrument> instruments;
+    static double money = 1000.0;
 
     public static void main (String [] args)
     {
@@ -22,6 +27,7 @@ public class Market
     private void runMarket()
     {
         Thread currentThread;
+        generateInstruments();
         threadPool = Executors.newFixedThreadPool(2, Executors.defaultThreadFactory());
 
         try
@@ -66,6 +72,18 @@ public class Market
         {
             System.out.println("\n\t<< MarketReadWriteNonBlockingException >> \n");
             ex.printStackTrace();
+        }
+    }
+
+    private static void generateInstruments()
+    {
+        String[] names = {"IMACs","EMACs","DMACs"};
+        Random random = new Random();
+        for (String name : names)
+        {
+            int quantity = random.nextInt(21);
+            double price = random.nextDouble() * 250;
+            instruments.add(new Instrument(name, quantity, price));
         }
     }
 }

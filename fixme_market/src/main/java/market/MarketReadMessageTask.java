@@ -1,12 +1,13 @@
 package market;
 
 import java.nio.ByteBuffer;
+import java.nio.channels.ReadPendingException;
 import java.util.concurrent.Future;
 
 public class MarketReadMessageTask implements Runnable
 {
     boolean isFirstMessage;
-//todo cancel the future object when timing out.
+
     public MarketReadMessageTask(boolean isFirstMessage)
     {
         this.isFirstMessage = isFirstMessage;
@@ -18,11 +19,18 @@ public class MarketReadMessageTask implements Runnable
         {
             System.out.println("\nWaiting for incoming message ...");
             ByteBuffer buffer = ByteBuffer.allocate(8192);
-            Future reading = Market.marketSocket.read(buffer);
-          //  Market.ReadWriteNonBlockingTimeOut();
+            Future reading = null;
+            try
+            {
+                reading = Market.marketSocket.read(buffer);
+            }
+            catch (ReadPendingException ex)
+            {
+                if (reading != null)
+                    reading.cancel(false);
+                continue;
+            }
             while (!reading.isDone());
-            //    System.out.println("Response not received. Response Duration timed-out");
-            //else
             {
                 buffer.flip();
                 String msg = new String(buffer.array()).trim();
@@ -33,7 +41,7 @@ public class MarketReadMessageTask implements Runnable
                     break;
                 }
                 else
-                    Market.startSending("market sees you");
+                    MarketReadHelper.processMessage(msg);
             }
         }
     }

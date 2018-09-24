@@ -8,6 +8,7 @@ public class BrokerCompletionHandler implements CompletionHandler<Void, Asynchro
     public void completed(Void att, AsynchronousSocketChannel ch)
     {
         Broker.startReading();
+        try{Thread.sleep(2000);} catch (InterruptedException ex) {}
         Broker.startSending();
     }
 

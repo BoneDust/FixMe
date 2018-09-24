@@ -27,7 +27,7 @@ public class BrokerSendMessageTask implements Runnable
                 if (writing != null)
                     writing.cancel(false);
             }
-            BrokerSendHelper.ReadWriteNonBlockingTimeOut();
+            Broker.ReadWriteNonBlockingTimeOut();
             if (!writing.isDone())
                 System.out.println("\nMessage not sent. Send duration timed-out");
             else

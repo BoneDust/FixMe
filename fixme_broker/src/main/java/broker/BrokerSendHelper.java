@@ -135,7 +135,7 @@ public class BrokerSendHelper
     private static String processMenuSelection(Scanner stdin)
     {
         String selected = displayMenu(stdin);
-        String message = "Broker=" + Integer.toString(Broker.id);
+        String message = "BrokerID=" + Integer.toString(Broker.id);
 
         switch (selected)
         {
@@ -183,6 +183,4 @@ public class BrokerSendHelper
         //message += "Checksum=" + retrieveChecksum(message) + "|";
         return message;
     }
-
-    //todo we now need to handle the incoming messages
 }
