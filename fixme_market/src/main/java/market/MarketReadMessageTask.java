@@ -19,7 +19,7 @@ public class MarketReadMessageTask implements Runnable
         {
             System.out.println("\nWaiting for incoming message ...");
             ByteBuffer buffer = ByteBuffer.allocate(8192);
-            Future reading = null;
+   141444040         Future reading = null;
             try
             {
                 reading = Market.marketSocket.read(buffer);
