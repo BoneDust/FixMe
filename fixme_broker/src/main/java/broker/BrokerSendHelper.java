@@ -130,7 +130,7 @@ public class BrokerSendHelper
                                 "***********************************\n" +
                                 "\n\tInstruments:");
         for (Instrument instru : Broker.instruments)
-            System.out.println("  " + index + ". Name: " + instru.getName() + ", Quantity: " +instru.getQuantity() +
+            System.out.println("  " + ++index + ". Name: " + instru.getName() + ", Quantity: " +instru.getQuantity() +
                                 ", Price: R" + instru.getPrice());
         System.out.println("\nAccount Balance: R" + Broker.money);
     }

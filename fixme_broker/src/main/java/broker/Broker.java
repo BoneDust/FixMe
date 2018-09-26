@@ -63,16 +63,16 @@ Broker
         threadPool.execute(new BrokerSendMessageTask());
     }
 
-    public static void ReadWriteNonBlockingTimeOut(Future future)
+    public static void ReadWriteNonBlockingTimeOut(Future future, boolean isSending)
     {
-        long startTime = Calendar.getInstance().getTimeInMillis();
+        long startTime = Calendar.getInstance().getTimeInMillis(), elapsedTIme;
         while (true)
         {
             long execTime = Calendar.getInstance().getTimeInMillis();
-            long elapse = execTime - startTime;
-            System.out.println("TIme passed: " + elapse +"  ;  Is the task done : " + future.isDone());
-            if (elapse >= TIME_OUT_DURATION || future.isDone())
+            elapsedTIme = execTime - startTime;
+            if (elapsedTIme >= TIME_OUT_DURATION || future.isDone())
                 break;
         }
+        System.out.println((isSending? "Send time: " : "Response time: ") + elapsedTIme +"ms");
     }
 }

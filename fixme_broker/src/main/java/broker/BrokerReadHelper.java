@@ -42,7 +42,7 @@ public class BrokerReadHelper
             else
             {
                 String name = tagSplit[3].split("=")[1];
-                double price = Double.parseDouble(tagSplit[5].split("=")[1]);
+                double price = Double.parseDouble(tagSplit[5].split("=")[1].split("R")[1]);
                 int itemIndex = 0;
                 for (Instrument instrument :Broker.instruments)
                 {
