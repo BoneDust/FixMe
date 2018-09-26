@@ -20,7 +20,7 @@ public class BrokerReadMessageTask implements Runnable
                 if (reading != null)
                     reading.cancel(false);
             }
-            Broker.ReadWriteNonBlockingTimeOut(reading);
+            Broker.ReadWriteNonBlockingTimeOut(reading, false);
             if (!reading.isDone())
             {
                 reading.cancel(false);

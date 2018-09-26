@@ -27,7 +27,7 @@ public class BrokerSendMessageTask implements Runnable
                 if (writing != null)
                     writing.cancel(false);
             }
-            Broker.ReadWriteNonBlockingTimeOut(writing);
+            Broker.ReadWriteNonBlockingTimeOut(writing, true);
             if (!writing.isDone())
             {
                 //writing.cancel(false);
