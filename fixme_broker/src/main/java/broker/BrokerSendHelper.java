@@ -21,15 +21,18 @@ public class BrokerSendHelper
                             "*  1. Request market list.                   *\n" +
                             "*  2. Request instrument list.               *\n" +
                             "*  3. View Inventory.                        *\n" +
-                            "*  5. Buy.                                   *\n" +
-                            "*  6. Sell.                                  *\n" +
-                            "*  7. Logout.                                  *\n" +
+                            "*  4. Buy.                                   *\n" +
+                            "*  5. Sell.                                  *\n" +
+                            "*  6. Logout.                                *\n" +
                             "*                                            *\n" +
                             "**********************************************\n" +
                             " Choice: ");
-            choice = stdin.nextLine();
+            if (stdin.hasNextLine())
+                choice = stdin.nextLine();
+            else
+                System.exit(0);
         }
-        while (!(choice.equals("1") || choice.equals("2") || choice.equals("3'") ||
+        while (!(choice.equals("1") || choice.equals("2") || choice.equals("3") ||
                 choice.equals("4") || choice.equals("5") || choice.equals("6")));
         return (choice);
     }
@@ -54,7 +57,7 @@ public class BrokerSendHelper
 
     private static String verifyBuyingPower(String name, String quantity, String price)
     {
-        if (Double.parseDouble(price) >= Broker.money)
+        if (Double.parseDouble(price) <= Broker.money)
             return ("Instrument=" + name +"|Quantity=" + quantity + "|Price=R" + price + "|");
         else
             return  ("Instrument=null|Quantity=null|Price=null|");
@@ -99,7 +102,7 @@ public class BrokerSendHelper
             else
                 System.exit(0);
         }
-        while (quantity.matches("^\\d+$"));
+        while (!quantity.matches("^\\d+$"));
 
         do
         {
@@ -109,7 +112,7 @@ public class BrokerSendHelper
             else
                 System.exit(0);
         }
-        while (price.matches("^\\d+(\\.\\d{1,2})?$"));
+        while (!price.matches("^\\d+(\\.\\d{1,2})?$"));
 
         if (isBuying)
             instrumentInfo = verifyBuyingPower(name, quantity, price);
@@ -125,7 +128,7 @@ public class BrokerSendHelper
         System.out.println("\n***********************************\n" +
                                 "*            Inventory            *\n" +
                                 "***********************************\n" +
-                                "\n\t\tInstruments:");
+                                "\n\tInstruments:");
         for (Instrument instru : Broker.instruments)
             System.out.println("  " + index + ". Name: " + instru.getName() + ", Quantity: " +instru.getQuantity() +
                                 ", Price: R" + instru.getPrice());
@@ -181,6 +184,7 @@ public class BrokerSendHelper
         while (message.equals("null"));
 
         //message += "Checksum=" + retrieveChecksum(message) + "|";
+        System.out.println("\nSending : " + message);
         return message;
     }
 }

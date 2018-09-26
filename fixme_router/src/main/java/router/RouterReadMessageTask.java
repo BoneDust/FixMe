@@ -1,8 +1,12 @@
 package router;
 
+import com.sun.imageio.spi.RAFImageOutputStreamSpi;
+
 import java.nio.ByteBuffer;
 import java.nio.channels.AsynchronousSocketChannel;
 import java.nio.channels.ReadPendingException;
+import java.rmi.MarshalException;
+import java.util.Iterator;
 import java.util.concurrent.Future;
 
 public class RouterReadMessageTask implements Runnable
@@ -37,24 +41,42 @@ public class RouterReadMessageTask implements Runnable
             while (!reading.isDone());
             buffer.flip();
             String message = new String(buffer.array()).trim();
-            int receiverId = RouterHelper.retrieveReceiverId(message);
-            int senderId =  RouterHelper.retrieveSenderId(message);
+            int senderId;
 
             if (message.equals(""))
             {
-                RouterHelper.endConnection(senderId, socket);
+                RouterHelper.endConnection(socket, isBroker);
                 break;
             }
             else
-                System.out.println("Message received: " + message);
+            {
+                senderId = RouterHelper.retrieveSenderId(message);
+                System.out.println("\nMessage received: " + message);
+            }
 
             if (!isBroker)
             {
-                RouterHelper.sendToBroker(receiverId, message);
+                int receiverId = RouterHelper.retrieveReceiverId(message);
+                if (Router.brokers.keySet().contains(receiverId))
+                    RouterHelper.sendToBroker(receiverId, message);
                 break;
             }
             else
-                RouterHelper.sendToMarket(receiverId, message);
+            {
+                if (message.contains("All"))
+                    RouterHelper.sendMarketList(senderId,socket);
+                else
+                {
+                    int receiverId = RouterHelper.retrieveReceiverId(message);
+                    if (Router.markets.keySet().contains(receiverId))
+                        RouterHelper.sendToMarket(receiverId, message);
+                    else
+                    {
+                        message += "Status=Rejected|";
+                        RouterHelper.sendToBroker(senderId, message);
+                    }
+                }
+            }
         }
         while (true);
     }

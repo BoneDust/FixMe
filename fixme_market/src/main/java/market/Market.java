@@ -5,9 +5,11 @@ import market.models.Instrument;
 import java.net.InetSocketAddress;
 import java.nio.channels.AsynchronousSocketChannel;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Random;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 public class Market
 {
@@ -27,6 +29,7 @@ public class Market
     private void runMarket()
     {
         Thread currentThread;
+        instruments = new ArrayList<>();
         generateInstruments();
         threadPool = Executors.newFixedThreadPool(2, Executors.defaultThreadFactory());
 
@@ -62,16 +65,15 @@ public class Market
         threadPool.execute(new MarketSendMessageTask(message));
     }
 
-    public static void ReadWriteNonBlockingTimeOut()
+    public static void ReadWriteNonBlockingTimeOut(Future future)
     {
-        try
+        long startTime = Calendar.getInstance().getTimeInMillis();
+        while (true)
         {
-            Thread.sleep(TIME_OUT_DURATION);
-        }
-        catch (InterruptedException ex)
-        {
-            System.out.println("\n\t<< MarketReadWriteNonBlockingException >> \n");
-            ex.printStackTrace();
+            long execTime = Calendar.getInstance().getTimeInMillis();
+            long elapse = execTime - startTime;
+            if (elapse >= TIME_OUT_DURATION || future.isDone())
+                break;
         }
     }
 
@@ -83,6 +85,7 @@ public class Market
         {
             int quantity = random.nextInt(21);
             double price = random.nextDouble() * 250;
+            price = (double)Math.round(price * 100d) / 100;
             instruments.add(new Instrument(name, quantity, price));
         }
     }

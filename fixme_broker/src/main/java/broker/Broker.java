@@ -5,8 +5,10 @@ import broker.models.Instrument;
 import java.net.InetSocketAddress;
 import java.nio.channels.AsynchronousSocketChannel;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 
 public class
@@ -17,7 +19,7 @@ Broker
     static int id = 0;
     final int PORT = 5000;
     final static int TIME_OUT_DURATION = 5000;
-    static ArrayList<Instrument> instruments;
+    static ArrayList<Instrument> instruments = new ArrayList<>();
     static double money = 1000.00;
     
     public static void main (String [] args)
@@ -61,18 +63,16 @@ Broker
         threadPool.execute(new BrokerSendMessageTask());
     }
 
-    public static void ReadWriteNonBlockingTimeOut()
+    public static void ReadWriteNonBlockingTimeOut(Future future)
     {
-        try
+        long startTime = Calendar.getInstance().getTimeInMillis();
+        while (true)
         {
-            Thread.sleep(TIME_OUT_DURATION);
-        }
-        catch (InterruptedException ex)
-        {
-            System.out.println("\n\t<< BrokerReadWriteNonBlockingException >> \n");
-            ex.printStackTrace();
+            long execTime = Calendar.getInstance().getTimeInMillis();
+            long elapse = execTime - startTime;
+            System.out.println("TIme passed: " + elapse +"  ;  Is the task done : " + future.isDone());
+            if (elapse >= TIME_OUT_DURATION || future.isDone())
+                break;
         }
     }
-
-
 }

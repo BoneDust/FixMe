@@ -19,7 +19,7 @@ public class MarketReadMessageTask implements Runnable
         {
             System.out.println("\nWaiting for incoming message ...");
             ByteBuffer buffer = ByteBuffer.allocate(8192);
-   141444040         Future reading = null;
+           Future reading = null;
             try
             {
                 reading = Market.marketSocket.read(buffer);
@@ -34,7 +34,7 @@ public class MarketReadMessageTask implements Runnable
             {
                 buffer.flip();
                 String msg = new String(buffer.array()).trim();
-                System.out.println("Response: " + msg);
+                System.out.println("Router response: " + msg);
                 if (isFirstMessage)
                 {
                     Market.id = Integer.parseInt(msg);

@@ -35,7 +35,7 @@ public class BrokerReadHelper
             {
                 String name = tagSplit[3].split("=")[1];
                 int quantity = Integer.parseInt(tagSplit[4].split("=")[1]);
-                double price = Double.parseDouble(tagSplit[5].split("=")[1]);
+                double price = Double.parseDouble(tagSplit[5].split("=")[1].split("R")[1]);
                 Broker.money -= price;
                 Broker.instruments.add(new Instrument(name, quantity,price));
             }

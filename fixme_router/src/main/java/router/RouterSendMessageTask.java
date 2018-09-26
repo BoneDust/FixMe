@@ -19,6 +19,7 @@ public class RouterSendMessageTask implements Runnable
 
     public  void run()
     {
+        System.out.println("\nResponse: " + message);
         byte[] bytes = message.getBytes();
         ByteBuffer buffer = ByteBuffer.wrap(bytes);
         Future writing = null;
@@ -31,11 +32,11 @@ public class RouterSendMessageTask implements Runnable
             if (writing != null)
                 writing.cancel(false);
         }
-        RouterHelper.RouterReadWriteNonBlockingTimeOut(Router.TIME_OUT_DURATION);
+        RouterHelper.RouterReadWriteNonBlockingTimeOut(writing);
         if (!writing.isDone())
         {
             writing.cancel(true);
-            System.out.println("couldn't write in time.");
+            System.out.println("\nMessage not sent. Send duration timed-out.");
         }
     }
 }

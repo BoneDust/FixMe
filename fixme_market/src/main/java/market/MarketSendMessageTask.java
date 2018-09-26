@@ -23,14 +23,14 @@ public class MarketSendMessageTask implements Runnable
             Future writing = null;
             try
             {
-                Market.marketSocket.write(buffer);
+               writing = Market.marketSocket.write(buffer);
             }
             catch (WritePendingException ex)
             {
                 if (writing != null)
                     writing.cancel(false);
             }
-            Market.ReadWriteNonBlockingTimeOut();
+            Market.ReadWriteNonBlockingTimeOut(writing);
             if  (!writing.isDone())
             {
                 writing.cancel(false);

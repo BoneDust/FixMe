@@ -1,7 +1,7 @@
 package broker;
 
 import java.nio.ByteBuffer;
-import java.nio.channels.ReadPendingException;
+import java.nio.channels.WritePendingException;
 import java.util.Scanner;
 import java.util.concurrent.Future;
 
@@ -20,16 +20,19 @@ public class BrokerSendMessageTask implements Runnable
             Future writing = null;
             try
             {
-                writing = Broker.brokerSocket.read(buffer);
+                writing = Broker.brokerSocket.write(buffer);
             }
-            catch (ReadPendingException ex)
+            catch (WritePendingException ex)
             {
                 if (writing != null)
                     writing.cancel(false);
             }
-            Broker.ReadWriteNonBlockingTimeOut();
+            Broker.ReadWriteNonBlockingTimeOut(writing);
             if (!writing.isDone())
+            {
+                //writing.cancel(false);
                 System.out.println("\nMessage not sent. Send duration timed-out");
+            }
             else
                 new BrokerReadMessageTask().run();
             buffer.clear();
