@@ -1,6 +1,7 @@
 package market;
 
 import market.models.Instrument;
+import router.ChecksumHelper;
 
 public class MarketReadHelper
 {
@@ -18,7 +19,7 @@ public class MarketReadHelper
           return (id);
     }
 
-    public static void sendInstruments(String message)//Market=50000|Broker=1000000|Transaction=View|Instruments=bitcoin, 34, 12.0::ripple, 353, 12.55|
+    public static void sendInstruments(String message)
     {
         String response = "Market=" + Integer.toString(Market.id) + "|Broker=" + getBrokerId(message) +
                         "|Transaction=View|Instruments=";
@@ -28,11 +29,11 @@ public class MarketReadHelper
                             instrument.getPrice() + "::";
             response += instrumenString;
         }
-        response += "|";//todo add checksum;
+        response += "|Checksum="  + ChecksumHelper.generateChecksum(message) + "|";
         new MarketSendMessageTask(response).run();
     }
 
-    private static void sendBuyTransaction(String message)//Market=500000|Broker=100000|Transaction=Buy|Instrument=ripple|Quantity=355|Price=425.34|Status=Executed|
+    private static void sendBuyTransaction(String message)
     {
         String response, name, tagsplit[] = message.split("\\|");
         int quantity;
@@ -57,9 +58,9 @@ public class MarketReadHelper
             }
         }
         if (approved)
-            response += "|Status=Executed|";
+            response += "|Status=Executed|Checksum="  + ChecksumHelper.generateChecksum(message) + "|";
         else
-            response += "|Status=Rejected|";
+            response += "|Status=Rejected|Checksum="  + ChecksumHelper.generateChecksum(message) + "|";
         new MarketSendMessageTask(response).run();
     }
 
@@ -88,20 +89,28 @@ public class MarketReadHelper
             }
         }
         if (approved)
-            response += "|Status=Executed|";
+            response += "|Status=Executed|Checksum="  + ChecksumHelper.generateChecksum(message) + "|";
         else
-            response += "|Status=Rejected|";
+            response += "|Status=Rejected|Checksum="  + ChecksumHelper.generateChecksum(message) + "|";
         new MarketSendMessageTask(response).run();
     }
 
     public static void processMessage(String message)
     {
-        String transaction = getTransactionType(message);
-        if (transaction.equals("View"))
-            sendInstruments(message);
-        else if (transaction.equals("Buy"))
-            sendBuyTransaction(message);
+        if (!message.equals(""))
+        {
+            String transaction = getTransactionType(message);
+            if (transaction.equals("View"))
+                sendInstruments(message);
+            else if (transaction.equals("Buy"))
+                sendBuyTransaction(message);
+            else
+                sendSellTransaction(message);
+        }
         else
-            sendSellTransaction(message);
+        {
+            System.out.println("\nRouter is  went offline");
+            System.exit(0);
+        }
     }
 }

@@ -79,7 +79,7 @@ public class Market
 
     private static void generateInstruments()
     {
-        String[] names = {"IMACs","EMACs","DMACs"};
+        String[] names = {"IMACS","EMACS","DMACS"};
         Random random = new Random();
         for (String name : names)
         {

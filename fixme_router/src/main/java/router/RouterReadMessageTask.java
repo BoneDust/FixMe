@@ -53,30 +53,28 @@ public class RouterReadMessageTask implements Runnable
                 senderId = RouterHelper.retrieveSenderId(message);
                 System.out.println("\nMessage received: " + message);
             }
-
-            if (!isBroker)
-            {
-                int receiverId = RouterHelper.retrieveReceiverId(message);
-                if (Router.brokers.keySet().contains(receiverId))
-                    RouterHelper.sendToBroker(receiverId, message);
-                break;
-            }
-            else
-            {
-                if (message.contains("All"))
-                    RouterHelper.sendMarketList(senderId,socket);
-                else
-                {
+            if (ChecksumHelper.isValidChecksum(message)) {
+                if (!isBroker) {
                     int receiverId = RouterHelper.retrieveReceiverId(message);
-                    if (Router.markets.keySet().contains(receiverId))
-                        RouterHelper.sendToMarket(receiverId, message);
-                    else
-                    {
-                        message += "Status=Rejected|";
-                        RouterHelper.sendToBroker(senderId, message);
+                    if (Router.brokers.keySet().contains(receiverId))
+                        RouterHelper.sendToBroker(receiverId, message);
+                    break;
+                } else {
+                    if (message.contains("All"))
+                        RouterHelper.sendMarketList(senderId, socket);
+                    else {
+                        int receiverId = RouterHelper.retrieveReceiverId(message);
+                        if (Router.markets.keySet().contains(receiverId))
+                            RouterHelper.sendToMarket(receiverId, message);
+                        else {
+                            message += "Status=Rejected|";
+                            RouterHelper.sendToBroker(senderId, message);
+                        }
                     }
                 }
             }
+            else
+                System.out.println("\nResponse: Invalid checksum");
         }
         while (true);
     }

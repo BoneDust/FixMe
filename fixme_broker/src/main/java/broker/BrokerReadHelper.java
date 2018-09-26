@@ -8,14 +8,16 @@ public class BrokerReadHelper
     {
         System.out.println("\nRouter response: " + message);
 
-        if (message.contains("Markets"))  //Broker=100000|Markets=454545, 45454, 5554, 45454|
+        if (message.equals(""))
+            System.exit(0);
+        else if (message.contains("Markets"))
         {
             String[] tagSplit = message.split("\\|");
             String markets = tagSplit[1].split("=")[1];
             System.out.println("\nOnline Markets: " + markets);
 
         }
-        else if (message.contains("Instruments"))//Market=50000|Broker=1000000|Transaction=View|Instruments=bitcoin, 34, 12.0::ripple, 353, 12.55|
+        else if (message.contains("Instruments"))
         {
             String[] tagSplit = message.split("\\|");
             String instrumentsString = tagSplit[3].split("=")[1];
@@ -27,7 +29,7 @@ public class BrokerReadHelper
                 System.out.println("Name: "+ items[0] + ", Quantity: " + items[1] + ", Price: R" + items[2]);
             }
         }
-        else if (message.contains("Status=Executed"))//Market=500000|Broker=100000|Transaction=Buy|Instrument=ripple|Quantity=355|Price=425.34|Status=Executed|
+        else if (message.contains("Status=Executed"))
         {
             String[] tagSplit = message.split("\\|");
             String transation = tagSplit[2].split("=")[1];

@@ -1,10 +1,9 @@
 package broker;
 
 import broker.models.Instrument;
-
+import router.ChecksumHelper;
 import java.util.Scanner;
 
-import static broker.Broker.TIME_OUT_DURATION;
 
 public class BrokerSendHelper
 {
@@ -183,7 +182,15 @@ public class BrokerSendHelper
         }
         while (message.equals("null"));
 
-        //message += "Checksum=" + retrieveChecksum(message) + "|";
+        try
+        {
+            message += "Checksum=" + ChecksumHelper.generateChecksum(message) + "|";
+        }
+        catch (ClassNotFoundException ex)//todo need to fix this
+        {
+            System.out.println("\nRouter is offline");
+            System.exit(0);
+        }
         System.out.println("\nSending : " + message);
         return message;
     }
