@@ -1,6 +1,4 @@
-package market;
-
-import market.models.Transaction;
+package router;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -9,7 +7,7 @@ import java.sql.Statement;
 
 public class DBHandler
 {
-    private void closeDBConnection(Connection connection, Statement statement)
+    public void closeDBConnection(Connection connection, Statement statement)
     {
         try
         {
@@ -24,7 +22,7 @@ public class DBHandler
         }
     }
 
-    private Connection getConnection()
+    public Connection getConnection()
     {
         Connection conn = null;
         try
@@ -74,7 +72,7 @@ public class DBHandler
             statement = connection.createStatement();
 
             String createHeroTable =
-                    "CREATE TABLE `fixme`.`transactions` (" +
+                    "CREATE TABLE if not exists `fixme`.`transactions` (" +
                             "`brokerId` INT NOT NULL, " +
                             "`marketId` INT NOT NULL, " +
                             "`type` TEXT NOT NULL, " +
@@ -84,38 +82,6 @@ public class DBHandler
                             "`price` DECIMAL);"
                     ;
             statement.executeUpdate(createHeroTable);
-        }
-        catch (SQLException ex)
-        {
-            ex.printStackTrace();
-        }
-        finally
-        {
-            closeDBConnection(connection, statement);
-        }
-    }
-
-    public void recordTransaction(Transaction transaction)
-    {
-        Connection connection = null;
-        Statement statement = null;
-        try
-        {
-            connection = getConnection();
-            statement = connection.createStatement();
-            String insertHero = String.format("INSERT INTO `fixme`.`transactions` (`brokerId`, `marketId`, `type`," +
-                            " `status`, `instrument`, `quantity`, `price`) " +
-                            " VALUES (%d, %d, %s, %s, %s, %d, %f);",
-                    transaction.getBrokerId(),
-                    transaction.getMarketId(),
-                    transaction.getType(),
-                    transaction.getStatus(),
-                    transaction.getInstrument(),
-                    transaction.getQuantity(),
-                    transaction.getPrice()
-            );
-            statement.executeUpdate(insertHero);
-
         }
         catch (SQLException ex)
         {

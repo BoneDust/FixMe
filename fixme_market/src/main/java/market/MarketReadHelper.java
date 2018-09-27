@@ -1,25 +1,28 @@
 package market;
 
 import market.models.Instrument;
+import market.models.Transaction;
 import router.ChecksumHelper;
 
 public class MarketReadHelper
 {
-    private static String getTransactionType(String message)
+    SaveTransactions saveTransaction = new SaveTransactions();
+
+    private String getTransactionType(String message)
     {
         String[] tagSplit = message.split("\\|");
         String transaction = tagSplit[2].split("=")[1];
         return (transaction);
     }
 
-    private static String getBrokerId(String message)
+    private String getBrokerId(String message)
     {
           String[] tags = message.split("\\|");
           String id = tags[0].split("=")[1];
           return (id);
     }
 
-    public static void sendInstruments(String message)
+    public void sendInstruments(String message)
     {
         String response = "Market=" + Integer.toString(Market.id) + "|Broker=" + getBrokerId(message) +
                         "|Transaction=View|Instruments=";
@@ -29,11 +32,14 @@ public class MarketReadHelper
                             instrument.getPrice() + "::";
             response += instrumenString;
         }
-        response += "|Checksum="  + ChecksumHelper.generateChecksum(message) + "|";
+        response += "|";
+        response += "Checksum="  + ChecksumHelper.generateChecksum(response) + "|";
+        saveTransaction.recordTransaction(new Transaction(Integer.parseInt(getBrokerId(message)), Market.id, "View",
+                                            "Executed", null,null, null));//todo might need to put this on a thread
         new MarketSendMessageTask(response).run();
     }
 
-    private static void sendBuyTransaction(String message)
+    private void sendBuyTransaction(String message)
     {
         String response, name, tagsplit[] = message.split("\\|");
         int quantity;
@@ -58,13 +64,17 @@ public class MarketReadHelper
             }
         }
         if (approved)
-            response += "|Status=Executed|Checksum="  + ChecksumHelper.generateChecksum(message) + "|";
+            response += "|Status=Executed|";
         else
-            response += "|Status=Rejected|Checksum="  + ChecksumHelper.generateChecksum(message) + "|";
+            response += "|Status=Rejected|";
+
+        response += "Checksum="  + ChecksumHelper.generateChecksum(response) + "|";
+        saveTransaction.recordTransaction(new Transaction(Integer.parseInt(getBrokerId(message)), Market.id, "Buy",
+                (approved? "Executed" : "Rejected"), name, quantity, price));
         new MarketSendMessageTask(response).run();
     }
 
-    private static void sendSellTransaction(String message)
+    private void sendSellTransaction(String message)
     {
         String response, name, tagsplit[] = message.split("\\|");
         int quantity;
@@ -89,13 +99,18 @@ public class MarketReadHelper
             }
         }
         if (approved)
-            response += "|Status=Executed|Checksum="  + ChecksumHelper.generateChecksum(message) + "|";
+            response += "|Status=Executed|";
         else
-            response += "|Status=Rejected|Checksum="  + ChecksumHelper.generateChecksum(message) + "|";
+            response += "|Status=Rejected|";
+
+        response += "Checksum="  + ChecksumHelper.generateChecksum(response) + "|";
+
+        saveTransaction.recordTransaction(new Transaction(Integer.parseInt(getBrokerId(message)), Market.id, "Sell",
+                (approved? "Executed" : "Rejected"), name, quantity, price));
         new MarketSendMessageTask(response).run();
     }
 
-    public static void processMessage(String message)
+    public void processMessage(String message)
     {
         if (!message.equals(""))
         {

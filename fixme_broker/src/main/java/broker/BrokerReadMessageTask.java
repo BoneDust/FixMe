@@ -6,6 +6,7 @@ import java.util.concurrent.Future;
 
 public class BrokerReadMessageTask implements Runnable
 {
+    BrokerReadHelper readHelper = new BrokerReadHelper();
     public  void run()
     {
             ByteBuffer buffer = ByteBuffer.allocate(8192);
@@ -23,14 +24,14 @@ public class BrokerReadMessageTask implements Runnable
             Broker.ReadWriteNonBlockingTimeOut(reading, false);
             if (!reading.isDone())
             {
-                reading.cancel(false);
+                //reading.cancel(false);
                 System.out.println("\nResponse not received. Response Duration timed-out");
             }
             else
             {
                 buffer.flip();
                 String message = new String(buffer.array()).trim();
-                BrokerReadHelper.processMessage(message);
+                readHelper.processMessage(message);
                 if (Broker.id == 0)
                     Broker.id = Integer.parseInt(message);
             }

@@ -12,7 +12,7 @@ public class RouterHelper
 
     public static void sendMarketList(int senderId, AsynchronousSocketChannel socket)
     {
-        String allMarkets =" ";
+        String allMarkets ="";
         Iterator iterator = Router.markets.keySet().iterator();
         if (iterator.hasNext())
         {

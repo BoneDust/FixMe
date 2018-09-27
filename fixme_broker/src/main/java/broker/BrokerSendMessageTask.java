@@ -7,6 +7,7 @@ import java.util.concurrent.Future;
 
 public class BrokerSendMessageTask implements Runnable
 {
+    BrokerSendHelper sendHelper = new BrokerSendHelper();
     public void run()
     {
         Scanner stdin = new Scanner(System.in);
@@ -14,7 +15,7 @@ public class BrokerSendMessageTask implements Runnable
 
         while (true)
         {
-            message = BrokerSendHelper.retrieveFixMessage(stdin);
+            message = sendHelper.retrieveFixMessage(stdin);
             byte[] bytes = message.getBytes();
             ByteBuffer buffer = ByteBuffer.wrap(bytes);
             Future writing = null;
@@ -30,7 +31,7 @@ public class BrokerSendMessageTask implements Runnable
             Broker.ReadWriteNonBlockingTimeOut(writing, true);
             if (!writing.isDone())
             {
-                //writing.cancel(false);
+                writing.cancel(false);
                 System.out.println("\nMessage not sent. Send duration timed-out");
             }
             else

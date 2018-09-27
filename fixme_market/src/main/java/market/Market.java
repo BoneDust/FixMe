@@ -60,10 +60,6 @@ public class Market
         threadPool.execute(new MarketReadMessageTask(isFirstMessage));
     }
 
-    public static void startSending(String message)
-    {
-        threadPool.execute(new MarketSendMessageTask(message));
-    }
 
     public static void ReadWriteNonBlockingTimeOut(Future future)
     {

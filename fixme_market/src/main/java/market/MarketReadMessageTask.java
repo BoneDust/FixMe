@@ -7,6 +7,7 @@ import java.util.concurrent.Future;
 public class MarketReadMessageTask implements Runnable
 {
     boolean isFirstMessage;
+    MarketReadHelper helper = new MarketReadHelper();
 
     public MarketReadMessageTask(boolean isFirstMessage)
     {
@@ -41,7 +42,7 @@ public class MarketReadMessageTask implements Runnable
                     break;
                 }
                 else
-                    MarketReadHelper.processMessage(msg);
+                    helper.processMessage(msg);
             }
         }
     }

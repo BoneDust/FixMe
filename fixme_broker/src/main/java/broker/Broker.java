@@ -11,8 +11,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
 
-public class
-Broker
+public class Broker
 {
     static AsynchronousSocketChannel brokerSocket;
     static ExecutorService threadPool;

@@ -22,6 +22,7 @@ public class Router
     static Map<Integer, AsynchronousSocketChannel> markets;
     private static ExecutorService threadPool;
     private static Thread currentThread;
+    static  DBHandler dbHandle = new DBHandler();
 
     public static void main(String[] args)
     {
@@ -30,8 +31,11 @@ public class Router
 
     private static void runRouter()
     {
+
         try
         {
+            dbHandle.createDB();
+            dbHandle.initDB();
             brokers = new HashMap<>();
             markets = new HashMap<>();
             threadPool  = Executors.newCachedThreadPool(Executors.defaultThreadFactory());

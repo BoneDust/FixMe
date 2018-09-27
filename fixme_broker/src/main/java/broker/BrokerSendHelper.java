@@ -1,13 +1,14 @@
 package broker;
 
 import broker.models.Instrument;
-import router.ChecksumHelper;
+import router.*;
 import java.util.Scanner;
 
 
 public class BrokerSendHelper
 {
-    private static String displayMenu(Scanner stdin)
+    ChecksumHelper checksumHelper;
+    private String displayMenu(Scanner stdin)
     {
         String choice =  "";
         do
@@ -36,7 +37,7 @@ public class BrokerSendHelper
         return (choice);
     }
 
-    private static String selectMarket(Scanner stdin)
+    private String selectMarket(Scanner stdin)
     {
         String choice = "0";
         do
@@ -54,7 +55,7 @@ public class BrokerSendHelper
         return (choice);
     }
 
-    private static String verifyBuyingPower(String name, String quantity, String price)
+    private String verifyBuyingPower(String name, String quantity, String price)
     {
         if (Double.parseDouble(price) <= Broker.money)
             return ("Instrument=" + name +"|Quantity=" + quantity + "|Price=R" + price + "|");
@@ -62,7 +63,7 @@ public class BrokerSendHelper
             return  ("Instrument=null|Quantity=null|Price=null|");
     }
 
-    private static String verifySellingPower(String name, String quantity, String price)
+    private String verifySellingPower(String name, String quantity, String price)
     {
         boolean foundInstrument = false;
         for (Instrument instrument : Broker.instruments)
@@ -79,7 +80,7 @@ public class BrokerSendHelper
             return  ("Instrument=null|Quantity=null|Price=null|");
     }
 
-    private static String selectInstrument(Scanner stdin, boolean isBuying)
+    private String selectInstrument(Scanner stdin, boolean isBuying)
     {
         String instrumentInfo = "", name = "", quantity = "", price = "";
 
@@ -121,7 +122,7 @@ public class BrokerSendHelper
         return (instrumentInfo);
     }
 
-    private static void viewInstruments()
+    private void viewInstruments()
     {
         int index = 0;
         System.out.println("\n***********************************\n" +
@@ -134,7 +135,7 @@ public class BrokerSendHelper
         System.out.println("\nAccount Balance: R" + Broker.money);
     }
 
-    private static String processMenuSelection(Scanner stdin)
+    private String processMenuSelection(Scanner stdin)
     {
         String selected = displayMenu(stdin);
         String message = "BrokerID=" + Integer.toString(Broker.id);
@@ -173,7 +174,7 @@ public class BrokerSendHelper
         return (message);
     }
 
-    public static  String retrieveFixMessage(Scanner stdin)
+    public  String retrieveFixMessage(Scanner stdin)
     {
         String message = "";
         do
@@ -184,9 +185,10 @@ public class BrokerSendHelper
 
         try
         {
-            message += "Checksum=" + ChecksumHelper.generateChecksum(message) + "|";
+            checksumHelper = new ChecksumHelper();
+            message += "Checksum=" + checksumHelper.generateChecksum(message) + "|";
         }
-        catch (ClassNotFoundException ex)//todo need to fix this
+        catch (Exception ex)//todo need to fix this ClassNotFoundException
         {
             System.out.println("\nRouter is offline");
             System.exit(0);

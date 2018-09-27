@@ -12,10 +12,10 @@ public class Transaction
     String type;
     String status;
     String instrument;
-    int quantity;
-    double price;
+    Integer quantity;
+    Double price;
 
-    public Transaction(int broker, int market, String type, String status, String instrument, int quantity, double cost)
+    public Transaction(int broker, int market, String type, String status, String instrument, Integer quantity, Double cost)
     {
         brokerId = broker;
         marketId = market;

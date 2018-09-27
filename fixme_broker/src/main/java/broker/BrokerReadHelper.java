@@ -4,7 +4,7 @@ import broker.models.Instrument;
 
 public class BrokerReadHelper
 {
-    public static void processMessage(String message)
+    public void processMessage(String message)
     {
         System.out.println("\nRouter response: " + message);
 
