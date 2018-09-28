@@ -18,13 +18,14 @@ public class BrokerReadMessageTask implements Runnable
             }
             catch (ReadPendingException ex)
             {
+                ex.printStackTrace();
                 if (reading != null)
                     reading.cancel(false);
             }
             Broker.ReadWriteNonBlockingTimeOut(reading, false);
             if (!reading.isDone())
             {
-                //reading.cancel(false);
+                reading.cancel(false);
                 System.out.println("\nResponse not received. Response Duration timed-out");
             }
             else

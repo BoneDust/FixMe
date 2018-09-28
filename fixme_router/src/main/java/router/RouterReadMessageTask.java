@@ -53,20 +53,33 @@ public class RouterReadMessageTask implements Runnable
                 senderId = RouterHelper.retrieveSenderId(message);
                 System.out.println("\nMessage received: " + message);
             }
-            if (ChecksumHelper.isValidChecksum(message)) {
-                if (!isBroker) {
+            if (ChecksumHelper.isValidChecksum(message))
+            {
+                if (!isBroker)
+                {
                     int receiverId = RouterHelper.retrieveReceiverId(message);
                     if (Router.brokers.keySet().contains(receiverId))
                         RouterHelper.sendToBroker(receiverId, message);
                     break;
-                } else {
+                }
+                else
+                {
                     if (message.contains("All"))
                         RouterHelper.sendMarketList(senderId, socket);
-                    else {
+                    else
+                    {
                         int receiverId = RouterHelper.retrieveReceiverId(message);
                         if (Router.markets.keySet().contains(receiverId))
+                        {
                             RouterHelper.sendToMarket(receiverId, message);
-                        else {
+                            if (!Router.markets.keySet().contains(receiverId))
+                            {
+                                message = "Market=" + receiverId + "|Broker=" + senderId + "|Status=Offline|";
+                                RouterHelper.sendToBroker(senderId, message);
+                            }
+                        }
+                        else
+                        {
                             message += "Status=Rejected|";
                             RouterHelper.sendToBroker(senderId, message);
                         }

@@ -73,6 +73,7 @@ public class DBHandler
 
             String createHeroTable =
                     "CREATE TABLE if not exists `fixme`.`transactions` (" +
+                            "`id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY , "+
                             "`brokerId` INT NOT NULL, " +
                             "`marketId` INT NOT NULL, " +
                             "`type` TEXT NOT NULL, " +
