@@ -13,6 +13,9 @@ public class RouterReadMessageTask implements Runnable
 {
 
     AsynchronousSocketChannel socket;
+    static final String ANSI_RESET = "\u001B[0m";
+    static final String ANSI_GREEN = "\u001B[32m";
+    static final String ANSI_YELLOW = "\u001B[33m";
     boolean isBroker;
 
     public RouterReadMessageTask(AsynchronousSocketChannel socket, boolean isBroker)
@@ -51,7 +54,10 @@ public class RouterReadMessageTask implements Runnable
             else
             {
                 senderId = RouterHelper.retrieveSenderId(message);
-                System.out.println("\nMessage received: " + message);
+                if (isBroker)
+                    System.out.println(ANSI_GREEN + message + ANSI_RESET);
+                else
+                    System.out.println(ANSI_YELLOW + message + ANSI_RESET);
             }
             if (ChecksumHelper.isValidChecksum(message))
             {
